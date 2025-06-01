@@ -43,7 +43,7 @@ def me(user:Annotated[SignUpUser, Depends(get_current_user)]):
         'email' : user.email
         }
 
-@router.post("/auth/forgot-password")
+@router.post("/auth/forgot-password", status_code=status.HTTP_200_OK)
 def forgot_password(data: ForgotPassword):
     usuario_existente = auth_dao.buscar_usuario_por_email(data.email)
     if not usuario_existente:
@@ -54,7 +54,7 @@ def forgot_password(data: ForgotPassword):
     
     return {"message": "Token de redefinição gerado", "reset_token": reset_token}
 
-@router.post("/auth/reset-password")
+@router.post("/auth/reset-password", status_code=status.HTTP_200_OK)
 def reset_password(data: ResetPassword):
     success = auth_dao.reset_password(data)
     if not success:
@@ -63,7 +63,7 @@ def reset_password(data: ResetPassword):
     return {"message": "Senha redefinida com sucesso"}
 
 
-@router.post("/refresh")
+@router.post("/refresh", status_code=status.HTTP_200_OK)
 def refresh_token(data: RefreshToken):
     novo_token, novo_token_refresh = verify_refresh_token(data.refresh_token)
     if not novo_token:
